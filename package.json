@@ -3,12 +3,17 @@
   "version": "0.0.1",
   "description": ".",
   "main": "app.js",
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/philpill/drafftyui.git"
+  },
   "scripts": {
     "start": "python -m SimpleHTTPServer 8000",
     "build": "webpack --watch"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/howler": "^2.0.5",
     "@types/pixi.js": "^4.5.7",
