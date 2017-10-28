@@ -1,4 +1,5 @@
-import Render from './render';
+import Render from './render.debug';
+import Piece from './piece';
 
 export default class Engine {
 
@@ -9,11 +10,11 @@ export default class Engine {
         this.render = new Render();
     }
 
-    init() {
+    init(pieces: Piece[]) {
 
         console.log('Engine.init()');
 
-        this.render.init();
+        this.render.init(pieces);
 
         this.update();
     }

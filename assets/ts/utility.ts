@@ -1,4 +1,3 @@
-module Utility {
 
     // https://stackoverflow.com/a/8809472
     export function GenerateUUID(): string {
@@ -12,4 +11,3 @@ module Utility {
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
     }
-}

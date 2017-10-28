@@ -1,11 +1,19 @@
 /* global __dirname */
 
-var path = require('path');
-var glob = require('glob');
+const path = require('path');
+const glob = require('glob');
 
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extractSass = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css"
+});
+
+
+var dir_sass = path.resolve(__dirname, 'assets/sass');
 var dir_ts = path.resolve(__dirname, 'assets/ts');
 var dir_build = path.resolve(__dirname, 'static');
 
@@ -25,12 +33,25 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js'] // note if using webpack 1 you'd also need a '' in the array as well
     },
     module: {
-        loaders: [ // loaders will work with webpack 1 or 2; but will be renamed "rules" in future
-            // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-            { test: /\.tsx?$/, loader: 'ts-loader' }
-        ]
+        rules: [
+            { test: /\.tsx?$/, loader: 'ts-loader' },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+            },
+            { test: /\.scss$/,
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings
+            }, {
+                loader: "css-loader" // translates CSS into CommonJS
+            }, {
+                loader: "sass-loader" // compiles Sass to CSS
+            }]
+        }]
     },
-    plugins: [],
+    plugins: [
+        extractSass
+    ],
     stats: {
         // Nice colored output
         colors: true

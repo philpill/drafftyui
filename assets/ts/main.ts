@@ -1,19 +1,31 @@
-import Engine from './engine';
+import Game from './game';
+import Service from './service';
 
 export default class Main {
 
-    engine: Engine;
+    game: Game;
+    service: Service;
 
     constructor() {
 
-        this.engine = new Engine();
+        this.service = new Service();
     }
 
     init() {
 
         console.log('init()');
 
-        this.engine.init();
+        this.service.createGame().then((game) => {
+
+            this.game = game;
+
+        }).then(() => {
+
+            this.service.joinGame(this.game.uuid);
+            this.service.startGame(this.game.uuid);
+        });
+
+
     }
 }
 

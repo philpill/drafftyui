@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-export default class Render {
+export default class RenderPixi {
 
     pixiApp: PIXI.Application;
 

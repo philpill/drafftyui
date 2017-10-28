@@ -1,0 +1,68 @@
+@import 'main';
+
+$white: #ffffff;
+$black: #000000;
+$silver: #efefef;
+$gray: #666666;
+$red: #ff0000;
+$blue: #0000ff;
+
+$primary: $silver;
+$secondary: $gray;
+
+table {
+    margin: 5rem;
+}
+
+td {
+    height: 2rem;
+    width: 2rem;
+    padding: 0.25rem;
+    border: solid 1px gray;
+    position: relative;
+}
+
+td:hover {
+    border-color: $red;
+}
+
+tr:nth-child(even) {
+    td:nth-child(even) {
+        background-color: $primary;
+    }
+    td:nth-child(odd) {
+        background-color: $secondary;
+    }
+}
+
+tr:nth-child(odd) {
+    td:nth-child(even) {
+        background-color: $secondary;
+    }
+    td:nth-child(odd) {
+        background-color: $primary;
+    }
+}
+
+a {
+    display: block;
+    background-color: $black;
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: 0.9rem;
+}
+
+a.player0 {
+    background-color: $red;
+}
+
+a.player1 {
+    background-color: $blue;
+}
+
+a:hover {
+    cursor: pointer;
+        box-shadow: 0px 0px 7px 2px $white;
+}
