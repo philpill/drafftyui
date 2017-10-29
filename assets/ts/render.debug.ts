@@ -13,6 +13,9 @@ export default class RenderDebug {
 
     sortedPieces: { [player: string] : Piece[]; };
 
+    private readonly selectedClass = 'piece-selected';
+    private readonly availableClass = 'grid-available';
+
     constructor() {
 
         this.docBody = document.body;
@@ -43,7 +46,9 @@ export default class RenderDebug {
 
             if (piece) {
 
-                document.getElementById(`Grid${ piece.position }`).appendChild(piece.renderObject);
+                let el = document.getElementById(`Grid${ piece.position }`);
+
+                el.appendChild(piece.renderObject);
             }
         });
     }
@@ -85,11 +90,53 @@ export default class RenderDebug {
         this.pieces.forEach((piece: Piece) => {
 
             if (piece) {
+                (piece.renderObject as HTMLAnchorElement).classList.remove(this.selectedClass);
                 piece.deselect();
+                this.removeAllHighlights();
             }
         });
 
+        (piece.renderObject as HTMLAnchorElement).classList.add(this.selectedClass);
         piece.select();
+        this.highlightGridMoves(piece);
+    }
+
+    removeAllHighlights() {
+
+        let els = Array.from(document.getElementsByClassName(this.availableClass));
+
+        for (var el of els) {
+
+            el.classList.remove(this.availableClass);
+        }
+    }
+
+    highlightGridMoves(piece: Piece) {
+
+        let currentPosition = piece.position;
+        let isKing = piece.isKing;
+        let isAscending = piece.direction === 1;
+
+        let pos1 = isKing || isAscending ? currentPosition + 8 + 1 : -1;
+        let pos2 = isKing || isAscending ? currentPosition + 8 - 1 : -1;
+        let pos3 = isKing || !isAscending ? currentPosition - 8 + 1 : -1;
+        let pos4 = isKing || !isAscending ? currentPosition - 8 - 1 : -1;
+
+        if (pos1 !== -1 && Math.floor(pos1/8)-1 === Math.floor(currentPosition/8) ) {
+            document.getElementById(`Grid${ pos1 }`).classList.add(this.availableClass);
+        }
+
+        if (pos2 !== -1 && Math.floor(pos2/8)-1 === Math.floor(currentPosition/8) ) {
+            document.getElementById(`Grid${ pos2 }`).classList.add(this.availableClass);
+        }
+
+        if (pos3 !== -1 && Math.floor(pos3/8)+1 === Math.floor(currentPosition/8) ) {
+            document.getElementById(`Grid${ pos3 }`).classList.add(this.availableClass);
+        }
+
+        if (pos4 !== -1 && Math.floor(pos4/8)+1 === Math.floor(currentPosition/8) ) {
+            document.getElementById(`Grid${ pos4 }`).classList.add(this.availableClass);
+        }
     }
 
     getPieceEl(id: string, playerIndex: number) {
@@ -127,7 +174,9 @@ export default class RenderDebug {
 
         for (let i = 0; i < 8; i++) {
 
-            row += '<td id="Grid' + (i + (rowIndex*8)) + '"></td>';
+            let id = `Grid${i + (rowIndex*8)}`;
+
+            row += `<td id="${ id }"></td>`;
         }
 
         row += '</tr>';

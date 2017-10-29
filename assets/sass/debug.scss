@@ -6,9 +6,13 @@ $silver: #efefef;
 $gray: #666666;
 $red: #ff0000;
 $blue: #0000ff;
+$green: #00ff00;
 
 $primary: $silver;
 $secondary: $gray;
+
+$piece-margin: 0.5rem;
+$piece-margin-hover: 0.4rem;
 
 table {
     margin: 5rem;
@@ -18,12 +22,12 @@ td {
     height: 2rem;
     width: 2rem;
     padding: 0.25rem;
-    border: solid 1px gray;
+    border: solid 1px $gray;
     position: relative;
 }
 
-td:hover {
-    border-color: $red;
+.grid-available {
+    border: solid 1px $green;
 }
 
 tr:nth-child(even) {
@@ -48,21 +52,37 @@ a {
     display: block;
     background-color: $black;
     position: absolute;
-    top: 0.9rem;
-    left: 0.9rem;
-    right: 0.9rem;
-    bottom: 0.9rem;
+    top: $piece-margin;
+    left: $piece-margin;
+    right: $piece-margin;
+    bottom: $piece-margin;
+    border-radius: 1em;
 }
 
 a.player0 {
-    background-color: $red;
+    background-color: $white;
+    box-shadow: 0px 0px 2px 1px $black;
+    &:hover {
+        box-shadow: none;
+    }
 }
 
 a.player1 {
-    background-color: $blue;
+    background-color: $black;
+    box-shadow: 0px 0px 2px 1px $silver;
+    &:hover {
+        box-shadow: none;
+    }
 }
 
 a:hover {
     cursor: pointer;
-        box-shadow: 0px 0px 7px 2px $white;
+    top: $piece-margin-hover;
+    left: $piece-margin-hover;
+    right: $piece-margin-hover;
+    bottom: $piece-margin-hover;
+}
+
+.piece-selected {
+    border: solid 1px $red;
 }

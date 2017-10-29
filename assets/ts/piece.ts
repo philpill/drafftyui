@@ -8,6 +8,7 @@ export default class Piece {
     uuid: string;
     isActive: boolean;
     renderObject: any;
+    direction: -1 | 1;
 
     constructor(owner: string) {
 
@@ -17,6 +18,7 @@ export default class Piece {
         this.isKing = false;
         this.owner = owner;
         this.position = 0;
+        this.direction = 1;
     }
 
     init() {

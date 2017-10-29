@@ -44,6 +44,7 @@ export default class Game {
             let piece = new Piece(this.player1.uuid);
 
             piece.position = i * 2;
+            piece.direction = 1;
 
             let isOddRow = (Math.floor(piece.position/this.ROW))%2 === 1;
 
@@ -57,6 +58,7 @@ export default class Game {
             let piece = new Piece(this.player2.uuid);
 
             piece.position = 63 - (i * 2);
+            piece.direction = -1;
 
             let isOddRow = (Math.floor(piece.position/this.ROW))%2 === 1;
 
