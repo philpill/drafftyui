@@ -1,14 +1,29 @@
 import Game from './game';
 import Service from './service';
+import Events from './events';
 
 export default class Main {
 
     game: Game;
     service: Service;
+    events: Events;
 
     constructor() {
 
         this.service = new Service();
+        this.events = Events.getInstance();
+
+        this.bindEvents();
+    }
+
+    bindEvents() {
+
+        this.events.on('render:piece:move', (uuid, position) => {
+
+            console.log('render:piece:move', uuid, position);
+
+            this.game.state = this.service.movePiece(uuid, position);
+        });
     }
 
     init() {

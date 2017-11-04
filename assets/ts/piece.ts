@@ -9,6 +9,7 @@ export default class Piece {
     isActive: boolean;
     renderObject: any;
     direction: -1 | 1;
+    isSelected: boolean;
 
     constructor(owner: string) {
 
@@ -29,11 +30,13 @@ export default class Piece {
 
         console.log('Piece.select()');
         console.log(this.uuid);
+        this.isSelected = true;
     }
 
     deselect() {
 
         console.log('Piece.deselect()');
         console.log(this.uuid);
+        this.isSelected = false;
     }
 }

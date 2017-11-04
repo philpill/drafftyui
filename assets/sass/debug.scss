@@ -30,6 +30,10 @@ td {
     border: solid 1px $green;
 }
 
+td.grid-available:hover {
+    cursor: pointer;
+}
+
 tr:nth-child(even) {
     td:nth-child(even) {
         background-color: $primary;

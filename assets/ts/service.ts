@@ -1,4 +1,5 @@
 import Game from './game';
+import Piece from './piece';
 import Player from './player';
 
 export default class Service {
@@ -86,7 +87,33 @@ export default class Service {
         this.tempGames[0].finish();
     }
 
-    movePiece() {
+    movePiece(pieceId: string, position: number): Piece[] {
 
+        // get piece position
+        let currentPosition = this.tempGames[0].state.findIndex((piece: Piece) => {
+            return piece && piece.uuid === pieceId;
+        });
+
+        // check position is empty
+        this.tempGames[0].state[position];
+
+        // check move is legal
+
+        // update piece position
+        let piece = this.tempGames[0].state.find((piece: Piece) => {
+            return piece && piece.uuid === pieceId;
+        });
+
+        piece.position = position;
+
+        return this.tempGames[0].state;
     }
 }
+
+
+
+
+
+
+
+

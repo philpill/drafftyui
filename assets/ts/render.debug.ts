@@ -1,7 +1,10 @@
 import 'normalize.css';
 import '../sass/debug.scss';
 
-import Piece from 'piece';
+import Piece from './piece';
+import Service from './service';
+
+import Events from './events';
 
 export default class RenderDebug {
 
@@ -16,13 +19,21 @@ export default class RenderDebug {
     private readonly selectedClass = 'piece-selected';
     private readonly availableClass = 'grid-available';
 
+    service: Service;
+
+    events: Events;
+
     constructor() {
+
+        this.service = new Service();
 
         this.docBody = document.body;
 
         this.sortedPieces = {};
 
         this.pieces = [];
+
+        this.events = Events.getInstance();
     }
 
     init(pieces: Piece[]) {
@@ -83,32 +94,68 @@ export default class RenderDebug {
         });
     }
 
-    selectPiece(piece: Piece) {
-
-        console.log(this);
+    deselectAllPieces() {
 
         this.pieces.forEach((piece: Piece) => {
 
             if (piece) {
                 (piece.renderObject as HTMLAnchorElement).classList.remove(this.selectedClass);
                 piece.deselect();
-                this.removeAllHighlights();
             }
         });
+    }
+
+    selectPiece(piece: Piece) {
+
+        console.log(this);
+
+        this.deselectAllPieces();
+        this.removeAllHighlights();
 
         (piece.renderObject as HTMLAnchorElement).classList.add(this.selectedClass);
         piece.select();
         this.highlightGridMoves(piece);
     }
 
+    selectAvailableGrid(e: MouseEvent) {
+
+        e.stopPropagation();
+
+        let cell = e.target as HTMLTableDataCellElement;
+
+        if (cell.classList.contains(this.availableClass)) {
+
+            // move piece to this grid
+            let selectedPieces = this.pieces.filter((piece: Piece) => {
+                return piece && piece.isSelected;
+            });
+
+            if (selectedPieces.length) {
+
+                let piece = selectedPieces[0];
+
+                piece.position = parseInt(cell.getAttribute('data-id'), 10);
+
+                this.events.emit('render:piece:move', piece.uuid, piece.position);
+
+                document.getElementById(`Grid${piece.position}`).appendChild(piece.renderObject);
+
+                // deselect piece
+                this.deselectAllPieces();
+
+                // reset grids
+                this.removeAllHighlights();
+
+            }
+        }
+    }
+
     removeAllHighlights() {
 
-        let els = Array.from(document.getElementsByClassName(this.availableClass));
-
-        for (var el of els) {
+        Array.from(document.getElementsByClassName(this.availableClass)).map((el: HTMLTableDataCellElement) => {
 
             el.classList.remove(this.availableClass);
-        }
+        });
     }
 
     highlightGridMoves(piece: Piece) {
@@ -121,6 +168,10 @@ export default class RenderDebug {
         let pos2 = isKing || isAscending ? currentPosition + 8 - 1 : -1;
         let pos3 = isKing || !isAscending ? currentPosition - 8 + 1 : -1;
         let pos4 = isKing || !isAscending ? currentPosition - 8 - 1 : -1;
+
+
+        // check for occupied squares
+
 
         if (pos1 !== -1 && Math.floor(pos1/8)-1 === Math.floor(currentPosition/8) ) {
             document.getElementById(`Grid${ pos1 }`).classList.add(this.availableClass);
@@ -165,6 +216,13 @@ export default class RenderDebug {
 
         this.stage.innerHTML = rows;
 
+        let grids = Array.from(this.stage.getElementsByTagName('td'));
+
+        grids.map((grid: HTMLTableDataCellElement) => {
+
+            grid.onclick = this.selectAvailableGrid.bind(this);
+        });
+
         this.docBody.appendChild(this.stage);
     }
 
@@ -174,9 +232,9 @@ export default class RenderDebug {
 
         for (let i = 0; i < 8; i++) {
 
-            let id = `Grid${i + (rowIndex*8)}`;
+            let id = i + (rowIndex * 8);
 
-            row += `<td id="${ id }"></td>`;
+            row += `<td id="Grid${ id }" data-id="${ id }"></td>`;
         }
 
         row += '</tr>';
